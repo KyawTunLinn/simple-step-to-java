@@ -1,0 +1,382 @@
+<!DOCTYPE HTML>
+<html lang="my" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>3. Variables နှင့် Data Types - Simple Steps to Java</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Java Programming Basic Course</a></li><li class="chapter-item expanded "><a href="01_Introduction_to_Java.html"><strong aria-hidden="true">2.</strong> 1. Java မိတ်ဆက်</a></li><li class="chapter-item expanded "><a href="02_Environment_Setup.html"><strong aria-hidden="true">3.</strong> 2. Environment ပြင်ဆင်ခြင်း</a></li><li class="chapter-item expanded "><a href="03_Variables_and_Data_Types.html" class="active"><strong aria-hidden="true">4.</strong> 3. Variables နှင့် Data Types</a></li><li class="chapter-item expanded "><a href="04_Operators.html"><strong aria-hidden="true">5.</strong> 4. Operators အကြောင်း</a></li><li class="chapter-item expanded "><a href="05_Control_Flow.html"><strong aria-hidden="true">6.</strong> 5. Control Flow</a></li><li class="chapter-item expanded "><a href="06_Loops.html"><strong aria-hidden="true">7.</strong> 6. Loops</a></li><li class="chapter-item expanded "><a href="07_Methods.html"><strong aria-hidden="true">8.</strong> 7. Methods</a></li><li class="chapter-item expanded "><a href="08_Arrays.html"><strong aria-hidden="true">9.</strong> 8. Arrays</a></li><li class="chapter-item expanded "><a href="09_OOP_Basics.html"><strong aria-hidden="true">10.</strong> 9. OOP အခြီခံ</a></li><li class="chapter-item expanded "><a href="10_Exception_Handling.html"><strong aria-hidden="true">11.</strong> 10. Exception Handling</a></li><li class="chapter-item expanded "><a href="11_Inheritance_and_Polymorphism.html"><strong aria-hidden="true">12.</strong> 11. Inheritance နန့် Polymorphism</a></li><li class="chapter-item expanded "><a href="12_Collections_ArrayList.html"><strong aria-hidden="true">13.</strong> 12. Collections (ArrayList)</a></li><li class="chapter-item expanded "><a href="13_File_IO_Basics.html"><strong aria-hidden="true">14.</strong> 13. File I/O Basics</a></li><li class="chapter-item expanded "><a href="14_Final_Practice_Projects.html"><strong aria-hidden="true">15.</strong> 14. Final Practice Projects</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Simple Steps to Java</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/KyawTunLinn/simple-step-to-java" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="အခနး-၃---variables-နန-data-types"><a class="header" href="#အခနး-၃---variables-နန-data-types">အခန်း (၃) - Variables နန့် Data Types</a></h1>
+<hr />
+<h2 id="ဒေအခနးပြီးကေ-ဇာသိရဖိုလဲ"><a class="header" href="#ဒေအခနးပြီးကေ-ဇာသိရဖိုလဲ">ဒေအခန်းပြီးကေ ဇာသိရဖို့လဲ?</a></h2>
+<ul>
+<li>Variable ဆိုစွာ ဇာလဲ, ဇာပိုင် declare/init လုပ်ဖို့လဲ</li>
+<li>Primitive data types ၈ မျိုးကို ဇာအချိန် သုံးဖို့လဲ</li>
+<li><code>String</code> ကို beginner အဆင့်မှာ မဖြစ်မနီသိရဖို့ operations တိ သုံးနိုင်လာဖို့</li>
+<li>Type casting (<code>widening</code>, <code>narrowing</code>) ကို နားလည်လာဖို့</li>
+<li><code>final</code> constant နန့် naming rules ကို မှန်မှန်ကန်ကန် သုံးနိုင်လာဖို့</li>
+</ul>
+<hr />
+<h2 id="variable-ဆိုစွာ-ဇာလဲ"><a class="header" href="#variable-ဆိုစွာ-ဇာလဲ">Variable ဆိုစွာ ဇာလဲ?</a></h2>
+<p>Variable ဆိုစွာ data value တခုကို name တခုပီးပြီးကေ memory အထဲမှာ သိမ်းထားရေ နီရာဖြစ်ပါရေ။</p>
+<pre><code class="language-java">int age = 20;
+// int = data type
+// age = variable name
+// 20 = value
+</code></pre>
+<hr />
+<h2 id="variable-ကြေညာပုံ"><a class="header" href="#variable-ကြေညာပုံ">Variable ကြေညာပုံ</a></h2>
+<pre><code class="language-java">DataType variableName = value;
+</code></pre>
+<p><strong>ဥပမာ:</strong></p>
+<pre><code class="language-java">int age = 25;
+double salary = 500000.50;
+char grade = 'A';
+boolean passed = true;
+String name = &quot;Mg Mg&quot;;
+</code></pre>
+<hr />
+<h2 id="data-types-အမျိုးအစား-၂-မျိုး"><a class="header" href="#data-types-အမျိုးအစား-၂-မျိုး">Data Types အမျိုးအစား ၂ မျိုး</a></h2>
+<ol>
+<li>Primitive data types</li>
+<li>Non-primitive data types</li>
+</ol>
+<h3 id="primitive-data-types-၈-မျိုး"><a class="header" href="#primitive-data-types-၈-မျိုး">Primitive Data Types (၈ မျိုး)</a></h3>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Type</th><th style="text-align: left">Size</th><th style="text-align: left">အသုံးပြုဖို့အခြေအနေ</th><th style="text-align: left">ဥပမာ</th></tr></thead><tbody>
+<tr><td style="text-align: left"><code>byte</code></td><td style="text-align: left">8-bit</td><td style="text-align: left">very small integer</td><td style="text-align: left"><code>byte b = 100;</code></td></tr>
+<tr><td style="text-align: left"><code>short</code></td><td style="text-align: left">16-bit</td><td style="text-align: left">small integer</td><td style="text-align: left"><code>short s = 30000;</code></td></tr>
+<tr><td style="text-align: left"><code>int</code></td><td style="text-align: left">32-bit</td><td style="text-align: left">normal integer</td><td style="text-align: left"><code>int count = 1000;</code></td></tr>
+<tr><td style="text-align: left"><code>long</code></td><td style="text-align: left">64-bit</td><td style="text-align: left">very large integer</td><td style="text-align: left"><code>long pop = 8000000000L;</code></td></tr>
+<tr><td style="text-align: left"><code>float</code></td><td style="text-align: left">32-bit</td><td style="text-align: left">decimal (less precision)</td><td style="text-align: left"><code>float f = 3.14f;</code></td></tr>
+<tr><td style="text-align: left"><code>double</code></td><td style="text-align: left">64-bit</td><td style="text-align: left">decimal (default choice)</td><td style="text-align: left"><code>double d = 3.14159;</code></td></tr>
+<tr><td style="text-align: left"><code>char</code></td><td style="text-align: left">16-bit</td><td style="text-align: left">single Unicode character</td><td style="text-align: left"><code>char c = 'A';</code></td></tr>
+<tr><td style="text-align: left"><code>boolean</code></td><td style="text-align: left">JVM-dependent</td><td style="text-align: left">true/false state</td><td style="text-align: left"><code>boolean ok = true;</code></td></tr>
+</tbody></table>
+</div>
+<p><strong>မှတ်ချက်:</strong></p>
+<ul>
+<li><code>long</code> value နောက်မှာ <code>L</code> ကိုထည့်ပါ</li>
+<li><code>float</code> value နောက်မှာ <code>f</code> ကိုထည့်ပါ</li>
+</ul>
+<h3 id="non-primitive-data-types"><a class="header" href="#non-primitive-data-types">Non-Primitive Data Types</a></h3>
+<pre><code class="language-java">String city = &quot;Yangon&quot;;
+int[] numbers = {1, 2, 3};
+</code></pre>
+<hr />
+<h2 id="string-basics-beginner-must-know"><a class="header" href="#string-basics-beginner-must-know">String Basics (Beginner Must-Know)</a></h2>
+<p><code>String</code> က non-primitive type ဖြစ်ပြီးကေ text data သိမ်းဖို့အဓိကသုံးရေ။</p>
+<pre><code class="language-java">String name = &quot;Aung Aung&quot;;
+System.out.println(name.length());          // 9
+System.out.println(name.toUpperCase());     // AUNG AUNG
+System.out.println(name.substring(0, 4));   // Aung
+</code></pre>
+<h3 id="-နန-equals-ကွာခြားချက"><a class="header" href="#-နန-equals-ကွာခြားချက"><code>==</code> နန့် <code>.equals()</code> ကွာခြားချက်</a></h3>
+<pre><code class="language-java">String a = &quot;java&quot;;
+String b = new String(&quot;java&quot;);
+
+System.out.println(a == b);        // false (reference compare)
+System.out.println(a.equals(b));   // true  (content compare)
+</code></pre>
+<p>String content နှိုင်းယှဉ်ဖို့ <code>.equals()</code> (သို့) <code>.equalsIgnoreCase()</code> ကိုသုံးပါ။</p>
+<hr />
+<h2 id="type-casting"><a class="header" href="#type-casting">Type Casting</a></h2>
+<h3 id="widening-casting-automatic"><a class="header" href="#widening-casting-automatic">Widening Casting (Automatic)</a></h3>
+<p>အသေး type ကနီ အကြီး type ကို ပြောင်းရေခါ Java က အလိုအလျောက် ပြောင်းပီးပါရေ။</p>
+<pre><code class="language-text">byte -&gt; short -&gt; int -&gt; long -&gt; float -&gt; double
+</code></pre>
+<pre><code class="language-java">int x = 100;
+double y = x; // 100.0
+</code></pre>
+<h3 id="narrowing-casting-manual"><a class="header" href="#narrowing-casting-manual">Narrowing Casting (Manual)</a></h3>
+<p>အကြီး type ကနီ အငယ် type သို့ ပြောင်းကေ manual cast လုပ်ဖို့လိုပါရေ။</p>
+<pre><code class="language-java">double price = 9.78;
+int whole = (int) price; // 9 (decimal ပိုင်းပျောက်ရေ)
+</code></pre>
+<hr />
+<h2 id="constants-final"><a class="header" href="#constants-final">Constants (<code>final</code>)</a></h2>
+<p>မပြောင်းချင်ရေ value တိကို <code>final</code> နန့် ကြေညာပါ။</p>
+<pre><code class="language-java">final double PI = 3.14159;
+// PI = 4.0; // Error
+</code></pre>
+<hr />
+<h2 id="naming-rules"><a class="header" href="#naming-rules">Naming Rules</a></h2>
+<h3 id="မှနကနရေပုံစံ"><a class="header" href="#မှနကနရေပုံစံ">မှန်ကန်ရေပုံစံ</a></h3>
+<ul>
+<li><code>camelCase</code> ကိုသုံးပါ (<code>studentAge</code>, <code>totalMarks</code>)</li>
+<li>variable name ကို letter (သို့) <code>_</code> နန့်စပါ</li>
+<li>meaningful name ပီးပါ (<code>a</code>, <code>b</code> ထက် <code>totalPrice</code> က ပိုကောင်းရေ)</li>
+</ul>
+<h3 id="မှားယွငးရေပုံစံ"><a class="header" href="#မှားယွငးရေပုံစံ">မှားယွင်းရေပုံစံ</a></h3>
+<pre><code class="language-java">int 1number = 5;   // number နန့် မစရပါ
+int my-age = 10;   // - မသုံးရပါ
+int class = 3;     // keyword ကို မသုံးရပါ
+</code></pre>
+<hr />
+<h2 id="complete-example"><a class="header" href="#complete-example">Complete Example</a></h2>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        String studentName = &quot;Ma Ma&quot;;
+        int age = 18;
+        double gpa = 3.85;
+        boolean graduated = false;
+        final String SCHOOL = &quot;No.1 University&quot;;
+
+        System.out.println(&quot;Name: &quot; + studentName);
+        System.out.println(&quot;Age: &quot; + age);
+        System.out.println(&quot;GPA: &quot; + gpa);
+        System.out.println(&quot;Graduated: &quot; + graduated);
+        System.out.println(&quot;School: &quot; + SCHOOL);
+    }
+}
+</code></pre>
+<hr />
+<h2 id="အဖြစများရေ-အမှားတိ"><a class="header" href="#အဖြစများရေ-အမှားတိ">အဖြစ်များရေ အမှားတိ</a></h2>
+<pre><code class="language-java">long n = 15000000000;   // Error (L မပါစွာ)
+long n2 = 15000000000L; // Correct
+
+float p = 5.99;   // Error (f မပါစွာ)
+float p2 = 5.99f; // Correct
+
+char letter = &quot;A&quot;; // Error
+char letter2 = 'A'; // Correct
+</code></pre>
+<hr />
+<h2 id="အခနးချုပ"><a class="header" href="#အခနးချုပ">အခန်းချုပ်</a></h2>
+<ul>
+<li>Variable = named memory location</li>
+<li>Primitive data types ၈ မျိုးကို အခြေအနေပေါ်မူတည်ပြီးကေ ရွီးသုံးရရေ</li>
+<li><code>String</code> methods (<code>length</code>, <code>substring</code>, <code>equals</code>) ကို သိကေ text handling ပိုလွယ်ရေ</li>
+<li>Casting လုပ်ရေခါ data loss ဖြစ်နိုင်ချက်ကို သတိထားရဖို့</li>
+<li><code>final</code> constant နန့် naming rules သုံးခြင်းက code quality ကို တိုးစီရေ</li>
+</ul>
+<hr />
+<h2 id="လေကျငခနးတိ"><a class="header" href="#လေကျငခနးတိ">လေ့ကျင့်ခန်းတိ</a></h2>
+<ol>
+<li>မိမိ profile အတွက် variables ၅ မျိုးတည်ဆောက်ပြီးကေ print ထုတ်ပါ</li>
+<li><code>double</code> ကို <code>int</code> cast လုပ်ပြီး result ကို မှတ်သားပါ</li>
+<li><code>final</code> variable တခုကို ပြောင်းကြည့်ပြီးကေ error ကိုလေ့လာပါ</li>
+<li><code>String</code> ၂ ခုကို <code>.equals()</code> နန့် နှိုင်းယှဉ်ပြီး output ပြပါ</li>
+<li>Wrong naming ၃ ခုကိုရီးပြီးကေ correct version ပြန်ရီးပါ</li>
+</ol>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="02_Environment_Setup.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="04_Operators.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="02_Environment_Setup.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="04_Operators.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

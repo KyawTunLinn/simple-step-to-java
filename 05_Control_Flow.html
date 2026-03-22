@@ -1,0 +1,363 @@
+<!DOCTYPE HTML>
+<html lang="my" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>5. Control Flow - Simple Steps to Java</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Java Programming Basic Course</a></li><li class="chapter-item expanded "><a href="01_Introduction_to_Java.html"><strong aria-hidden="true">2.</strong> 1. Java မိတ်ဆက်</a></li><li class="chapter-item expanded "><a href="02_Environment_Setup.html"><strong aria-hidden="true">3.</strong> 2. Environment ပြင်ဆင်ခြင်း</a></li><li class="chapter-item expanded "><a href="03_Variables_and_Data_Types.html"><strong aria-hidden="true">4.</strong> 3. Variables နှင့် Data Types</a></li><li class="chapter-item expanded "><a href="04_Operators.html"><strong aria-hidden="true">5.</strong> 4. Operators အကြောင်း</a></li><li class="chapter-item expanded "><a href="05_Control_Flow.html" class="active"><strong aria-hidden="true">6.</strong> 5. Control Flow</a></li><li class="chapter-item expanded "><a href="06_Loops.html"><strong aria-hidden="true">7.</strong> 6. Loops</a></li><li class="chapter-item expanded "><a href="07_Methods.html"><strong aria-hidden="true">8.</strong> 7. Methods</a></li><li class="chapter-item expanded "><a href="08_Arrays.html"><strong aria-hidden="true">9.</strong> 8. Arrays</a></li><li class="chapter-item expanded "><a href="09_OOP_Basics.html"><strong aria-hidden="true">10.</strong> 9. OOP အခြီခံ</a></li><li class="chapter-item expanded "><a href="10_Exception_Handling.html"><strong aria-hidden="true">11.</strong> 10. Exception Handling</a></li><li class="chapter-item expanded "><a href="11_Inheritance_and_Polymorphism.html"><strong aria-hidden="true">12.</strong> 11. Inheritance နန့် Polymorphism</a></li><li class="chapter-item expanded "><a href="12_Collections_ArrayList.html"><strong aria-hidden="true">13.</strong> 12. Collections (ArrayList)</a></li><li class="chapter-item expanded "><a href="13_File_IO_Basics.html"><strong aria-hidden="true">14.</strong> 13. File I/O Basics</a></li><li class="chapter-item expanded "><a href="14_Final_Practice_Projects.html"><strong aria-hidden="true">15.</strong> 14. Final Practice Projects</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Simple Steps to Java</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/KyawTunLinn/simple-step-to-java" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="အခနး-၅---control-flow-if-else-switch"><a class="header" href="#အခနး-၅---control-flow-if-else-switch">အခန်း (၅) - Control Flow (If-Else, Switch)</a></h1>
+<hr />
+<h2 id="ဒေအခနးပြီးကေ-ဇာလုပနိုငဖိုလဲ"><a class="header" href="#ဒေအခနးပြီးကေ-ဇာလုပနိုငဖိုလဲ">ဒေအခန်းပြီးကေ ဇာလုပ်နိုင်ဖို့လဲ?</a></h2>
+<ul>
+<li>Condition အပေါ်မူတည်ပြီးကေ code လမ်းကြောင်း ရွီးနိုင်လာဖို့</li>
+<li><code>if</code>, <code>if-else</code>, <code>else-if</code>, nested if ကို အသုံးချနိုင်လာဖို့</li>
+<li><code>switch</code> ဖြင့် menu-style logic ရီးနိုင်လာဖို့</li>
+<li>String comparison, missing <code>break</code> စရေ mistakes ကို ရှောင်နိုင်လာဖို့</li>
+</ul>
+<hr />
+<h2 id="၁-if-statement"><a class="header" href="#၁-if-statement">၁) <code>if</code> Statement</a></h2>
+<pre><code class="language-java">if (condition) {
+    // condition true ဖြစ်ကေ run ပါဖို့
+}
+</code></pre>
+<pre><code class="language-java">int temperature = 35;
+if (temperature &gt; 30) {
+    System.out.println(&quot;Drink more water&quot;);
+}
+</code></pre>
+<hr />
+<h2 id="၂-if-else"><a class="header" href="#၂-if-else">၂) <code>if-else</code></a></h2>
+<pre><code class="language-java">int balance = 5000;
+int withdraw = 3000;
+
+if (withdraw &lt;= balance) {
+    System.out.println(&quot;ငွေထုတ်လို့ရရေ&quot;);
+} else {
+    System.out.println(&quot;ငွေမလောက်ပါ&quot;);
+}
+</code></pre>
+<hr />
+<h2 id="၃-else-if-chain"><a class="header" href="#၃-else-if-chain">၃) <code>else-if</code> Chain</a></h2>
+<pre><code class="language-java">int marks = 78;
+
+if (marks &gt;= 80) {
+    System.out.println(&quot;Grade A&quot;);
+} else if (marks &gt;= 70) {
+    System.out.println(&quot;Grade B&quot;);
+} else if (marks &gt;= 60) {
+    System.out.println(&quot;Grade C&quot;);
+} else if (marks &gt;= 50) {
+    System.out.println(&quot;Grade D&quot;);
+} else {
+    System.out.println(&quot;Grade F&quot;);
+}
+</code></pre>
+<hr />
+<h2 id="၄-nested-if"><a class="header" href="#၄-nested-if">၄) Nested <code>if</code></a></h2>
+<pre><code class="language-java">boolean isRegistered = true;
+String password = &quot;1234&quot;;
+
+if (isRegistered) {
+    if (password.equals(&quot;1234&quot;)) {
+        System.out.println(&quot;Login success&quot;);
+    } else {
+        System.out.println(&quot;Wrong password&quot;);
+    }
+} else {
+    System.out.println(&quot;Please register first&quot;);
+}
+</code></pre>
+<hr />
+<h2 id="၅-switch-statement"><a class="header" href="#၅-switch-statement">၅) <code>switch</code> Statement</a></h2>
+<pre><code class="language-java">int day = 2;
+
+switch (day) {
+    case 1:
+        System.out.println(&quot;Monday&quot;);
+        break;
+    case 2:
+        System.out.println(&quot;Tuesday&quot;);
+        break;
+    case 3:
+        System.out.println(&quot;Wednesday&quot;);
+        break;
+    default:
+        System.out.println(&quot;Invalid day&quot;);
+}
+</code></pre>
+<h3 id="string-switch-example"><a class="header" href="#string-switch-example">String switch example</a></h3>
+<pre><code class="language-java">String role = &quot;admin&quot;;
+
+switch (role) {
+    case &quot;admin&quot;:
+        System.out.println(&quot;Full access&quot;);
+        break;
+    case &quot;editor&quot;:
+        System.out.println(&quot;Edit access&quot;);
+        break;
+    case &quot;viewer&quot;:
+        System.out.println(&quot;Read-only access&quot;);
+        break;
+    default:
+        System.out.println(&quot;Unknown role&quot;);
+}
+</code></pre>
+<hr />
+<h2 id="if-vs-switch-ဇာအချိနသုံးဖိုလဲ"><a class="header" href="#if-vs-switch-ဇာအချိနသုံးဖိုလဲ"><code>if</code> vs <code>switch</code> ဇာအချိန်သုံးဖို့လဲ?</a></h2>
+<ul>
+<li>Condition range (<code>&gt;=</code>, <code>&lt;=</code>, <code>&amp;&amp;</code>) များပြီးဆိုကေ <code>if-else</code></li>
+<li>Value တခုကို case အများနန့်ရွီးစွာဆိုကေ <code>switch</code></li>
+</ul>
+<hr />
+<h2 id="အဖြစများရေ-အမှားတိ"><a class="header" href="#အဖြစများရေ-အမှားတိ">အဖြစ်များရေ အမှားတိ</a></h2>
+<pre><code class="language-java">if (x = 10) { }    // Error
+if (x == 10) { }   // Correct
+
+if (name == &quot;Mg Mg&quot;) { }        // Bad for String content
+if (name.equals(&quot;Mg Mg&quot;)) { }   // Correct
+
+switch (day) {
+    case 1:
+        System.out.println(&quot;Mon&quot;);
+    case 2:
+        System.out.println(&quot;Tue&quot;); // break မပါလို့ ဆက်ဝင်ဖို့
+}
+</code></pre>
+<hr />
+<h2 id="အခနးချုပ"><a class="header" href="#အခနးချုပ">အခန်းချုပ်</a></h2>
+<ul>
+<li>Control Flow က program logic ဧ heart ဖြစ်တေ</li>
+<li><code>if</code> family က condition-based decisions အတွက်သင့်တော်ရေ</li>
+<li><code>switch</code> က discrete choices (menu, command, status) အတွက်သင့်တော်ရေ</li>
+</ul>
+<hr />
+<h2 id="လေကျငခနးတိ"><a class="header" href="#လေကျငခနးတိ">လေ့ကျင့်ခန်းတိ</a></h2>
+<ol>
+<li>Score (0-100) ကို grade (A-F) သတ်မှတ်ပါ</li>
+<li>Weekday number (1-7) ကို day name ပြဖို့ <code>switch</code> သုံးပါ</li>
+<li>Number တခု even/odd စစ်ဖို့ <code>if</code> သုံးပါ</li>
+<li>Username/password mini login logic တခု ရီးပါ</li>
+</ol>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="04_Operators.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="06_Loops.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="04_Operators.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="06_Loops.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
