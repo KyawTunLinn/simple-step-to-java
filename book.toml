@@ -1,0 +1,12 @@
+[book]
+authors = ["ကျော်ထွန်းလင်း"]
+language = "my"
+multilingual = false
+src = "."
+title = "Simple Steps to Java"
+
+[build]
+create-missing = false
+
+[output.html]
+git-repository-url = "https://github.com/KyawTunLinn/simple-step-to-java"
