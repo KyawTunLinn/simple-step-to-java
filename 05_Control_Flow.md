@@ -35,9 +35,9 @@ int balance = 5000;
 int withdraw = 3000;
 
 if (withdraw <= balance) {
-    System.out.println("ငွေထုတ်လို့ရရေ");
+    System.out.println("You can withdraw money");
 } else {
-    System.out.println("ငွေမလောက်ပါ");
+    System.out.println("Insufficient balance");
 }
 ```
 

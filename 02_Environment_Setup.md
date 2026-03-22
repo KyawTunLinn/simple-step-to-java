@@ -122,7 +122,7 @@ try {
     int age = sc.nextInt();
     System.out.println("Age = " + age);
 } catch (InputMismatchException e) {
-    System.out.println("Age မှာ number ကိုရာထည့်ပါ");
+    System.out.println("Plz enter no in age");
 }
 ```
 
